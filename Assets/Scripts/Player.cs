@@ -7,66 +7,63 @@ public class Player : Humanoid {
 	public Transform groundCheck; // Objeto para checar colisao com o  chao
 	public LayerMask whatIsGround; // Layer para indicar o que e chao
 	public float jumpForce = 700f; // Força do pulo
+    public Rigidbody2D body2D; // Armazena o componente Rigidbody2D do gameObject
+    public BoxCollider2D boxCollider;
+    public float eixoX; // Float que recebe o valor do Input.GetAxis("Horizontal") para movimentacao
+    public float eixoY;
+    public Lifebar lifebar;
 
     private bool olhandoDireita = true;
 	private bool grounded = false; // Bool para indicar se o personagem esta tocando o chao
-	private float eixoX; // Float que recebe o valor do Input.GetAxis("Horizontal") para movimentacao
-    private float eixoY;
     private Animator animator; // Armazena o componente Animator do gameObject
-	private Rigidbody2D body2D; // Armazena o componente Rigidbody2D do gameObject
 	private float groundRadius = 0.2f; // Raio produzido pelo groundCheck
 	private bool isAndando = false; // Bool para dizer se o personagem esta andando ou parado
-    private bool canClimb = false;
-    private int exp;
-    private BoxCollider2D boxCollider;
+    private bool onLadder;
+    private bool canClimb;
+
+//----------------------------- MÉTODOS DO SISTEMA 
 
 	// Use this for initialization
 	void Awake () {
         // Atributos
         this.HP = 10;
         this.Dano = 2;
-        this.exp = 0;
+	}
 
+    void Start()
+    {
         animator = GetComponent<Animator>();    //Recebe o componente Animator do gameObject
         body2D = GetComponent<Rigidbody2D>();   // Recebe o componente Rigidbody2D do gameObject
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>(); // Recebe o BoxCollider2D do player
         this.velocidadeMax = 5.0f;              // Velocidade maxima do personagem
-	}
-	
+    }
+
 	// FixedUpdate tem resultados melhores para uso da fisica
 	void FixedUpdate () 
     {
         Mover();
         Pulo();
+        Escalar();
 	}
 
-    // Evento chamado ao entrar em colisão com algum collider2D com trigger
-    void OnTriggerEnter2D(Collider2D collider)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
-        // Se a tag do objeto em colisao for igual a Ladder
         if (collider.gameObject.tag == "Ladder")
         {
-            canClimb = true;
+            onLadder = true;
         }
     }
 
-    // Evento chamado ao sair da colisão com algum collider2D com trigger
-    void OnTriggerExit2D(Collider2D collider)
+    public void OnTriggerExit2D(Collider2D collider)
     {
-        // Se a tag do objeto em colisao for igual a Ladder
         if (collider.gameObject.tag == "Ladder")
         {
-            canClimb = false;
+            onLadder = false;
         }
     }
 
-    void Escalar()
-    {
-        // Muda a gravidade do rigidbody para 0
-        body2D.gravityScale = 0;    
-        // Faz o player se mover nos eixos X e Y
-        body2D.velocity = new Vector2(eixoX * velocidadeMax, eixoY * velocidadeMax);    
-    }
+
+//----------------------------- MÉTODOS PLAYER
 
     void Pulo()
     {
@@ -89,29 +86,30 @@ public class Player : Humanoid {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
 
         animator.SetFloat("speed", Mathf.Abs(eixoX));   // Passa o valor exato dos controles para o animator do gameObject
-        animator.SetBool("ground", grounded);           // Muda o Bool ground do animator
+        animator.SetBool("ground", grounded);   // Muda o Bool ground do animator
         animator.SetFloat("vSpeed", body2D.velocity.y); // Muda o Float vSpeed do animator passando a velocidade vertical
-        animator.SetBool("isCrouch", false);
-        isAndando = false;                              // Muda o Bool isAndando para false, indicando que o player não está andando
+        animator.SetBool("isCrouch", false);    // Muda o Bool isCrouch para false
+        isAndando = false;  // Muda o Bool isAndando para false, indicando que o player não está andando
+        canClimb = false;
 
-        if( (grounded) && (eixoX == 0) && (Input.GetKey(KeyCode.S)) )
+        // Movimentação principal
+        body2D.gravityScale = 6;    // Muda a gravidade do rigidbody para 6
+        body2D.velocity = new Vector2(eixoX * velocidadeMax, body2D.velocity.y);   // Move na direcao recebida do eixo x
+
+        if( onLadder )
+        {
+            canClimb = true;
+        }
+
+        // Se o player estiver tocando o chão, estiver parado e pressionar a tecla S...
+        if( (grounded) && (eixoX == 0) && (Input.GetKey(KeyCode.S)) ) 
         {
             Agachar();
         }
         else
         {
-            boxCollider.size = new Vector2(boxCollider.size.x, 1.20f);
-            boxCollider.offset = new Vector2(boxCollider.offset.x, 0.3f);
-        }
-
-        if (canClimb) // Se canClimb = True
-        {
-            Escalar();
-        }
-        else
-        {
-            body2D.gravityScale = 6;    // Muda a gravidade do rigidbody para 6
-            body2D.velocity = new Vector2(eixoX * velocidadeMax, body2D.velocity.y);   // Move na direcao recebida do eixo x
+            boxCollider.size = new Vector2(boxCollider.size.x, 1.20f);  // Ajusta o tamanho do boxCollider para o tamanho inicial
+            boxCollider.offset = new Vector2(boxCollider.offset.x, 0.3f); // Ajuda a posição do boxCollider para a posição inicial
         }
 
         if (eixoX != 0) // Se alguma força estiver sendo aplicada nos eixos horizontais
@@ -158,9 +156,18 @@ public class Player : Humanoid {
         boxCollider.offset = new Vector2(boxCollider.offset.x, 0.20f);
     }
 
+    void Escalar()
+    {
+        if (canClimb)
+        {
+            body2D.gravityScale = 0;    // Muda a gravidade do rigidbody para 6
+            body2D.velocity = new Vector2(body2D.velocity.x, eixoY * velocidadeMax);   // Move na direcao recebida do eixo x
+        }
+    }
+
     void CheckGameOver()
     {
-        if (this.HP <= 0)
+        if (lifebar.slider.value <= 0)
         {
             Destroy(this);
         }
