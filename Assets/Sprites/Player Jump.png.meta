@@ -1,0 +1,115 @@
+fileFormatVersion: 2
+guid: 4c6f9c2349f5db24282822be7955310f
+timeCreated: 1436875425
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Player Jump_0
+    21300002: Player Jump_1
+    21300004: Player Jump_2
+    21300006: Player Jump_3
+    21300008: Player Jump_4
+    21300010: Player Jump_5
+    21300012: Player Jump_6
+    21300014: Player Jump_7
+    21300016: Player Jump_8
+    21300018: Player Jump_9
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Player Jump_0
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 403
+        width: 77
+        height: 180
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player Jump_1
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 397
+        width: 114
+        height: 191
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player Jump_2
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 397
+        width: 129
+        height: 191
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player Jump_3
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 397
+        width: 114
+        height: 191
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player Jump_4
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 403
+        width: 77
+        height: 180
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
