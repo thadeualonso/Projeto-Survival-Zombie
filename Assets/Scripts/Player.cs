@@ -96,7 +96,7 @@ public class Player : Humanoid {
         body2D.gravityScale = 6;    // Muda a gravidade do rigidbody para 6
         body2D.velocity = new Vector2(eixoX * velocidadeMax, body2D.velocity.y);   // Move na direcao recebida do eixo x
 
-        if( onLadder )
+        if(onLadder)
         {
             canClimb = true;
         }
@@ -162,6 +162,15 @@ public class Player : Humanoid {
         {
             body2D.gravityScale = 0;    // Muda a gravidade do rigidbody para 6
             body2D.velocity = new Vector2(body2D.velocity.x, eixoY * velocidadeMax);   // Move na direcao recebida do eixo x
+        }
+
+        if ((canClimb) && ((eixoY > 0) || (eixoY < 0)))
+        {
+            animator.SetBool("isClimbing", true);
+        }
+        else
+        {
+            animator.SetBool("isClimbing", false);
         }
     }
 
