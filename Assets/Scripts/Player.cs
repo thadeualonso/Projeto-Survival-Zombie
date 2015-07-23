@@ -18,8 +18,7 @@ public class Player : Humanoid {
     private Animator animator; // Armazena o componente Animator do gameObject
 	private float groundRadius = 0.2f; // Raio produzido pelo groundCheck
 	private bool isAndando = false; // Bool para dizer se o personagem esta andando ou parado
-    private bool onLadder;
-    private bool canClimb;
+    public bool canClimb;
 
 //----------------------------- MÉTODOS DO SISTEMA 
 
@@ -43,14 +42,15 @@ public class Player : Humanoid {
     {
         Mover();
         Pulo();
-        Escalar();
 	}
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Ladder")
         {
-            onLadder = true;
+            canClimb = true;
+            animator.SetBool("isClimbing", true);
+            Escalar();
         }
     }
 
@@ -58,7 +58,8 @@ public class Player : Humanoid {
     {
         if (collider.gameObject.tag == "Ladder")
         {
-            onLadder = false;
+            canClimb = false;
+            animator.SetBool("isClimbing", false);
         }
     }
 
@@ -95,11 +96,6 @@ public class Player : Humanoid {
         // Movimentação principal
         body2D.gravityScale = 6;    // Muda a gravidade do rigidbody para 6
         body2D.velocity = new Vector2(eixoX * velocidadeMax, body2D.velocity.y);   // Move na direcao recebida do eixo x
-
-        if(onLadder)
-        {
-            canClimb = true;
-        }
 
         // Se o player estiver tocando o chão, estiver parado e pressionar a tecla S...
         if( (grounded) && (eixoX == 0) && (Input.GetKey(KeyCode.S)) ) 
@@ -158,19 +154,10 @@ public class Player : Humanoid {
 
     void Escalar()
     {
-        if (canClimb)
+        if (Input.GetKey(KeyCode.W) && canClimb)
         {
             body2D.gravityScale = 0;    // Muda a gravidade do rigidbody para 6
             body2D.velocity = new Vector2(body2D.velocity.x, eixoY * velocidadeMax);   // Move na direcao recebida do eixo x
-        }
-
-        if ((canClimb) && ((eixoY > 0) || (eixoY < 0)))
-        {
-            animator.SetBool("isClimbing", true);
-        }
-        else
-        {
-            animator.SetBool("isClimbing", false);
         }
     }
 
