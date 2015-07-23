@@ -18,7 +18,7 @@ public class Player : Humanoid {
     private Animator animator; // Armazena o componente Animator do gameObject
 	private float groundRadius = 0.2f; // Raio produzido pelo groundCheck
 	private bool isAndando = false; // Bool para dizer se o personagem esta andando ou parado
-    public bool canClimb;
+    private bool canClimb;
 
 //----------------------------- MÉTODOS DO SISTEMA 
 
@@ -42,27 +42,24 @@ public class Player : Humanoid {
     {
         Mover();
         Pulo();
+        Escalar();
 	}
 
-    public void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Ladder")
         {
             canClimb = true;
-            animator.SetBool("isClimbing", true);
-            Escalar();
         }
     }
 
-    public void OnTriggerExit2D(Collider2D collider)
+    void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Ladder")
         {
             canClimb = false;
-            animator.SetBool("isClimbing", false);
         }
     }
-
 
 //----------------------------- MÉTODOS PLAYER
 
@@ -91,7 +88,6 @@ public class Player : Humanoid {
         animator.SetFloat("vSpeed", body2D.velocity.y); // Muda o Float vSpeed do animator passando a velocidade vertical
         animator.SetBool("isCrouch", false);    // Muda o Bool isCrouch para false
         isAndando = false;  // Muda o Bool isAndando para false, indicando que o player não está andando
-        canClimb = false;
 
         // Movimentação principal
         body2D.gravityScale = 6;    // Muda a gravidade do rigidbody para 6
@@ -154,18 +150,14 @@ public class Player : Humanoid {
 
     void Escalar()
     {
-        if (Input.GetKey(KeyCode.W) && canClimb)
-        {
-            body2D.gravityScale = 0;    // Muda a gravidade do rigidbody para 6
-            body2D.velocity = new Vector2(body2D.velocity.x, eixoY * velocidadeMax);   // Move na direcao recebida do eixo x
+        if(canClimb){
+            body2D.gravityScale = 0;
+            body2D.velocity = new Vector2(body2D.velocity.x, eixoY * velocidadeMax);
+            animator.SetBool("isClimbing", true);
         }
-    }
-
-    void CheckGameOver()
-    {
-        if (lifebar.slider.value <= 0)
+        else
         {
-            Destroy(this);
+            animator.SetBool("isClimbing", false);
         }
     }
 
