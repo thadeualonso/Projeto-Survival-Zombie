@@ -50,6 +50,7 @@ public class Player : Humanoid {
         if (collider.gameObject.tag == "Ladder")
         {
             canClimb = true;
+            animator.SetBool("canClimb", true);
         }
     }
 
@@ -58,6 +59,7 @@ public class Player : Humanoid {
         if (collider.gameObject.tag == "Ladder")
         {
             canClimb = false;
+            animator.SetBool("canClimb", false);
         }
     }
 
@@ -153,12 +155,19 @@ public class Player : Humanoid {
         if(canClimb){
             body2D.gravityScale = 0;
             body2D.velocity = new Vector2(body2D.velocity.x, eixoY * velocidadeMax);
+        }
+
+        if ((canClimb) && ((eixoY > 0) || (eixoY < 0)))
+        {
             animator.SetBool("isClimbing", true);
         }
         else
         {
             animator.SetBool("isClimbing", false);
         }
+
+
+
     }
 
 }
